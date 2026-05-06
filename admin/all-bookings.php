@@ -8,8 +8,6 @@ if(strlen($_SESSION['aid'])==0)
 header('location:index.php');
 }
 else{
-
-
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,15 +16,11 @@ else{
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Restaurent Table Booking System | All Bookings</title>
 
-  
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  
   <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-  
   <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  
   <link rel="stylesheet" href="../dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition sidebar-mini">
@@ -34,12 +28,9 @@ else{
   
 <?php include_once("includes/navbar.php");?>
   
-
  <?php include_once("includes/sidebar.php");?>
 
-  
   <div class="content-wrapper">
-    
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -56,14 +47,12 @@ else{
       </div>
     </section>
 
-    
     <section class="content">
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
             <div class="card">
-        
-
+            
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Bookings Details</h3>
@@ -78,7 +67,7 @@ else{
                     <th>Name</th>
                     <th>Email Id</th>
                     <th>Mobile No</th>
-                    <th>No. Adults</th>
+                    <th>Table Name</th> <th>No. Adults</th>
                     <th>No of Childrens</th>
                     <th>Boking Date/Time</th>
                      <th>Posting Date</th>
@@ -86,17 +75,31 @@ else{
                   </tr>
                   </thead>
                   <tbody>
-<?php $query=mysqli_query($con,"select * from tblbookings ");
+<?php 
+// ------------------------------------------------------------------------
+// NEW CODE: Using the View instead of the raw tblbookings table
+// ------------------------------------------------------------------------
+$query=mysqli_query($con,"SELECT * FROM vw_booking_details ORDER BY postingDate DESC");
 $cnt=1;
 while($result=mysqli_fetch_array($query)){
 ?>
 
                   <tr>
                     <td><?php echo $cnt;?></td>
-                    <td><?php echo $result['bookingNo']?></td>
-                    <td><?php echo $result['fullName']?></td>
+                    <td><?php echo $result['booking_reference']?></td>
+                    <td><?php echo $result['customer_name']?></td>
                     <td><?php echo $result['emailId']?></td>
-                   <td><?php echo $result['phoneNumber']?></td>
+                   <td><?php echo $result['mobileNumber']?></td>
+                   <td>
+                       <?php 
+                       // Display the table name from the View. If none is assigned yet, show a badge
+                       if($result['tableName']) {
+                           echo $result['tableName'];
+                       } else {
+                           echo '<span class="badge badge-warning">Not Assigned</span>';
+                       }
+                       ?>
+                   </td>
                    <td><?php echo $result['noAdults']?></td>
                     <td><?php echo $result['noChildrens']?></td>
                     <td><?php echo $result['bookingDate']?>/<?php echo $result['bookingTime']?></td>
@@ -115,7 +118,7 @@ while($result=mysqli_fetch_array($query)){
                     <th>Name</th>
                     <th>Email Id</th>
                     <th>Mobile No</th>
-                    <th>No. Adults</th>
+                    <th>Table Name</th> <th>No. Adults</th>
                     <th>No of Childrens</th>
                     <th>Boking Date/Time</th>
                      <th>Posting Date</th>
@@ -146,12 +149,8 @@ while($result=mysqli_fetch_array($query)){
   
 </div>
 
-
-
 <script src="../plugins/jquery/jquery.min.js"></script>
-
 <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 <script src="../plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -164,9 +163,7 @@ while($result=mysqli_fetch_array($query)){
 <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
 <script src="../dist/js/adminlte.min.js"></script>
-
 <script src="../dist/js/demo.js"></script>
 
 <script>
